@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+    <div id="lingsheng">
+        <el-menu
+                :default-active="activeIndex2"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b">
+            <el-menu-item index="1" > new page</el-menu-item>
+            <el-menu-item  index="2" > view page</el-menu-item >
+            <el-menu-item index="3"> edit page</el-menu-item>
+        </el-menu>
+        <div v-show="tab1">
+            <div></div>
+        </div>
+        <div v-show="tab2">
+            222222222222222222
+        </div>
+        <div v-show="tab3">
+            33333333333
+        </div>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el: "#lingsheng",
+            data: {
+                msg: "qqqqqqqqqqqqqqqqqqqqqqq",
+                activeIndex: '1',
+                activeIndex2: '1',
+                tab1: true,
+                tab2: false,
+                tab3: false
+            },
+            methods:{
+                handleSelect(key, keyPath) {
+                    if (key === "1"){
+                        this.tab1 = true
+                        this.tab2 = false
+                        this.tab3 = false
+                    } else if (key === "2"){
+                        this.tab1 = false
+                        this.tab2 = true
+                        this.tab3 = false
+                    } else {
+                        this.tab1 = false
+                        this.tab2 = false
+                        this.tab3 = true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
