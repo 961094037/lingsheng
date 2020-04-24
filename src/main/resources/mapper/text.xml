@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="package com.example.demo">
+<mapper namespace="com.example.demo.dao.TextDao">
 
+    <resultMap id="TextEntity" type="com.example.demo.entity.TextEntity">
+        <result property="textId" column="text_id"/>
+        <result property="textName" column="text_name"/>
+        <result property="textValue" column="text_value"/>
+        <result property="textUrl" column="text_url"/>
+    </resultMap>
 
+    <select id="selectPageVo" resultMap="TextEntity">
+        SELECT text_id, text_name, text_value, text_url FROM text
+    </select>
 
 
 </mapper>
