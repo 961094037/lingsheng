@@ -23,32 +23,67 @@
             <el-menu-item  index="2" > view page</el-menu-item >
             <el-menu-item index="3"> edit page</el-menu-item>
         </el-menu>
-        <el-row>
-            <el-col :span="8">文本名称</el-col>
-            <el-col :span="8">文本内容</el-col>
-            <el-col :span="8">操作</el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="8">
-                <el-input v-model="newTextName" placeholder="请输入文本名"></el-input>
-            </el-col>
-            <el-col :span="8">
-                <el-input v-model="newTextValue" placeholder="请输入文本内容" type="textarea"></el-input>
-            </el-col>
-            <el-col :span="8">
-                <el-button type="primary">
-                    保存
-                </el-button>
-            </el-col>
-        </el-row>
         <div v-show="tab1">
-            <div></div>
+            <div>
+                <el-row>
+                    <el-col :span="8">文本名称</el-col>
+                    <el-col :span="8">文本内容</el-col>
+                    <el-col :span="8">操作</el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-input v-model="newTextName" placeholder="请输入文本名"></el-input>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-input v-model="newTextValue" placeholder="请输入文本内容" type="textarea"></el-input>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-button type="primary">
+                            保存
+                        </el-button>
+                    </el-col>
+                </el-row>
+            </div>
         </div>
         <div v-show="tab2">
-            222222222222222222
+            <el-row>
+                <el-col :span="8">文本url</el-col>
+                <el-col :span="8">文本名称</el-col>
+                <el-col :span="8">操作</el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-input v-model="newTextName" placeholder="请输入文本名"></el-input>
+                </el-col>
+                <el-col :span="8">
+                    <el-input v-model="newTextValue" placeholder="请输入文本内容" type="textarea"></el-input>
+                </el-col>
+                <el-col :span="8">
+                    <el-button type="primary">
+                        编辑
+                    </el-button>
+                </el-col>
+            </el-row>
         </div>
         <div v-show="tab3">
-            33333333333
+            <el-row>
+                <el-col :span="8">文本url</el-col>
+                <el-col :span="8">文本内容</el-col>
+                <el-col :span="8">操作</el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-input v-model="newTextName" placeholder="请输入文本名"></el-input>
+                </el-col>
+                <el-col :span="8">
+                    <el-input v-model="newTextValue" placeholder="请输入文本内容" type="textarea"></el-input>
+                </el-col>
+                <el-col :span="8">
+                    <el-button type="primary">
+                        提交
+                    </el-button>
+                </el-col>
+            </el-row>
         </div>
     </div>
     <script type="text/javascript">

@@ -3,6 +3,7 @@ package com.example.demo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @Api("demo")
 @RequestMapping("/demo")
 public class DemoController {
+
+    @Autowired
+    TextService textService;
 
     @PostMapping("/text")
     @ApiModelProperty(value = "demo")

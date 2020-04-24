@@ -14,5 +14,8 @@ import java.util.Map;
 @Service
 public class TextService {
 
-    Map<Long, TextEntity> map = new HashMap<>();
+    public void addText(){
+
+    }
+
 }
