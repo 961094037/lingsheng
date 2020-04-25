@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.service.TextService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -21,11 +23,11 @@ public class SringBootInit implements CommandLineRunner {
     @Value("${text.basePath}")
     private String basePath;
 
+    @Autowired
+    private TextService textService;
+
     @Override
     public void run(String... strings) throws Exception {
-        File file = new File(basePath);
-        if (!file.exists()){
-            file.mkdirs();
-        }
+        textService.checkFileFold();
     }
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.demo.entity.TextEntity;
 import com.example.demo.entity.dto.TextAddDto;
+import com.example.demo.entity.dto.TextEditDto;
 
 /**
  * 
@@ -20,5 +21,11 @@ public interface TextService extends IService<TextEntity> {
     R saveText(TextAddDto textAddDto);
 
     IPage<TextEntity> selectTextPage(Page<TextEntity> page);
+
+    R editText(String textId);
+
+    R updateText(TextEditDto textEditDto);
+
+    void checkFileFold();
 }
 

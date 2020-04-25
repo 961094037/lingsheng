@@ -9,6 +9,19 @@ spring:
     url: jdbc:mysql://rm-bp1krws6w65h95jhd2o.mysql.rds.aliyuncs.com:3306/hanghang?serverTimezone=UTC&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.mysql.cj.jdbc.MysqlConnectionPoolDataSource
+  redis:
+      open: true  # 是否开启redis缓存  true开启   false关闭
+      database: 0
+      host: www.wengshuhang.icu
+      port: 6379
+      password: 961094037 # 密码（默认为空）
+      timeout: 6000ms  # 连接超时时长（毫秒）
+      jedis:
+        pool:
+          max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+          max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+          max-idle: 10      # 连接池中的最大空闲连接
+          min-idle: 5       # 连接池中的最小空闲连接
 
 
 text:

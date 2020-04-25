@@ -8,11 +8,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.dao.TextDao;
 import com.example.demo.entity.TextEntity;
 import com.example.demo.entity.dto.TextAddDto;
+import com.example.demo.entity.dto.TextEditDto;
 import com.example.demo.service.TextService;
 import com.example.demo.utils.RRException;
+import com.example.demo.utils.RedisUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.UUID;
@@ -23,16 +27,14 @@ public class TextServiceImpl extends ServiceImpl<TextDao, TextEntity> implements
     @Value("${text.basePath}")
     private String basePath;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public R saveText(TextAddDto textAddDto) {
 
-
-
-        File file = new File(basePath);
-        if (!file.exists()){
-            file.mkdirs();
-        }
+        checkFileFold();
         String textId = UUID.randomUUID().toString();
         String fileName = textAddDto.getTextName() + "_" + textId + ".txt";
         String fileUrl = basePath + "\\" + fileName;
@@ -81,5 +83,77 @@ public class TextServiceImpl extends ServiceImpl<TextDao, TextEntity> implements
     @Override
     public IPage<TextEntity> selectTextPage(Page<TextEntity> page) {
         return getBaseMapper().selectPageVo(page);
+    }
+
+    @Override
+    public R editText(String textId) {
+        String oldAuth = redisUtils.get(textId);
+        if (StringUtils.isEmpty(oldAuth)){
+            String auth = UUID.randomUUID().toString();
+            redisUtils.set(textId, auth, 60);
+            return R.ok(auth);
+        }else{
+            return R.failed("该文件正在被他人修改");
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public R updateText(TextEditDto textEditDto) {
+        TextEntity entity = getById(textEditDto.getTextId());
+        if (entity != null){
+            checkFileFold();
+            String oldAuth = redisUtils.get(textEditDto.getTextId());
+            if (StringUtils.isEmpty(oldAuth)){
+                entity.setTextValue(textEditDto.getTextValue());
+                this.updateById(entity);
+                updateTextFile(entity.getTextUrl(), textEditDto.getTextValue());
+                return R.ok("");
+            }else if (oldAuth.equals(textEditDto.getAuth())){
+                entity.setTextValue(textEditDto.getTextValue());
+                this.updateById(entity);
+                updateTextFile(entity.getTextUrl(), textEditDto.getTextValue());
+                redisUtils.delete(entity.getTextId());
+                return R.ok("");
+            }else {
+                return R.failed("该文件正在被他人修改");
+            }
+        }else {
+            return R.failed("该文件不存在");
+        }
+    }
+
+    /**
+     * 修改文本文件
+     */
+    private void updateTextFile(String textUrl, String textValue){
+        File file = new File(textUrl);
+        if (!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RRException("更新文本失败");
+            }
+        }
+        try {
+            FileOutputStream ps = new FileOutputStream(file);
+            ps.write(textValue.getBytes());
+            ps.close();
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+            throw new RRException("修改文本失败");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RRException("修改文本失败");
+        }
+    }
+
+    @Override
+    public void checkFileFold(){
+        File file = new File(basePath);
+        if (!file.exists()){
+            file.mkdirs();
+        }
     }
 }
