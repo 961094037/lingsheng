@@ -114,8 +114,12 @@
                 newTextValue: '',
                 data: {
                     textList:[],
-                    auth: ''
+                    auth: '',
+                    editId: ''
                 }
+            },
+            created:function(){
+                this.refreshList();
             },
             methods:{
                 newPage(){
@@ -127,13 +131,11 @@
                     this.tab1 = false
                     this.tab2 = true
                     this.tab3 = false
-                    this.refreshList()
                 },
                 editPage(){
                     this.tab1 = false
                     this.tab2 = false
                     this.tab3 = true
-                    this.refreshList()
                 },
                 newText(){
                     var app = this;
@@ -153,7 +155,8 @@
                         }else {
                             app.$message.success('保存成功');
                             app.newTextName = '',
-                            app.newTextValue = ''
+                            app.newTextValue = '',
+                            app.refreshList()
                         }
                     },
                     error: function(xhr, errorType, error) {
@@ -186,31 +189,36 @@
                 },
                 edit(text, index){
                     var app = this
-                    var request = {
-                        textId : text.textId,
-                        auth: app.data.auth
-                    }
-                    $.ajax({
-                        type: 'post',
-                        url: "/text/edit",
-                        dataType: 'json',
-                        contentType:"application/json",
-                        data: JSON.stringify(request),
-                        success: function (data) {
-                            if (data.code != 0){
-                                app.$message.error(data.msg)
-                            }else {
-                                app.data.auth = data.data
-                                app.tab1 = false
-                                app.tab2 = false
-                                app.tab3 = true
-                                text.edit = false
-                            }
-                        },
-                        error: function(xhr, errorType, error) {
-                            alert('Ajax request error, errorType: ' + errorType +  ', error: ' + error)
+                    if (app.data.editId != '' && app.data.editId != null && app.data.editId != text.textId){
+                        app.$message.error("请先提交正在编辑的文件")
+                    }else {
+                        var request = {
+                            textId : text.textId,
+                            auth: app.data.auth
                         }
-                    });
+                        $.ajax({
+                            type: 'post',
+                            url: "/text/edit",
+                            dataType: 'json',
+                            contentType:"application/json",
+                            data: JSON.stringify(request),
+                            success: function (data) {
+                                if (data.code != 0){
+                                    app.$message.error(data.msg)
+                                }else {
+                                    app.data.auth = data.data
+                                    app.tab1 = false
+                                    app.tab2 = false
+                                    app.tab3 = true
+                                    text.edit = false
+                                    app.data.editId = text.textId
+                                }
+                            },
+                            error: function(xhr, errorType, error) {
+                                alert('Ajax request error, errorType: ' + errorType +  ', error: ' + error)
+                            }
+                        });
+                    }
                 },
                 commit(item, index){
                     var app = this
@@ -230,6 +238,7 @@
                                 this.$message.error(data.msg)
                             }else {
                                 app.data.auth = ''
+                                app.data.editId = ''
                                 app.$message.success('修改成功')
                                 app.tab1 = false
                                 app.tab2 = true
