@@ -22,7 +22,7 @@ public interface TextService extends IService<TextEntity> {
 
     IPage<TextEntity> selectTextPage(Page<TextEntity> page);
 
-    R editText(String textId);
+    R editText(TextEditDto textEditDto);
 
     R updateText(TextEditDto textEditDto);
 

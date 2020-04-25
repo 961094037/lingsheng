@@ -75,10 +75,10 @@ public class TextController {
     /**
      * 编辑接口
      */
-    @GetMapping("/edit")
+    @PostMapping("/edit")
     @ApiOperation(value = "编辑接口")
-    public R edit(@RequestParam("textId") String textId){
-        return textService.editText(textId);
+    public R edit(@RequestBody TextEditDto textEditDto){
+        return textService.editText(textEditDto);
     }
 
     /**

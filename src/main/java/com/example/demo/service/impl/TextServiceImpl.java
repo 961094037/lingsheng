@@ -86,13 +86,15 @@ public class TextServiceImpl extends ServiceImpl<TextDao, TextEntity> implements
     }
 
     @Override
-    public R editText(String textId) {
-        String oldAuth = redisUtils.get(textId);
+    public R editText(TextEditDto textEditDto) {
+        String oldAuth = redisUtils.get(textEditDto.getTextId());
         if (StringUtils.isEmpty(oldAuth)){
             String auth = UUID.randomUUID().toString();
-            redisUtils.set(textId, auth, 60);
+            redisUtils.set(textEditDto.getTextId(), auth, 60);
             return R.ok(auth);
-        }else{
+        }else if(oldAuth.equals(textEditDto.getAuth())){
+            return R.ok(textEditDto.getAuth());
+        }else {
             return R.failed("该文件正在被他人修改");
         }
     }

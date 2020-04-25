@@ -187,14 +187,15 @@
                 edit(text, index){
                     var app = this
                     var request = {
-                        textId : text.textId
+                        textId : text.textId,
+                        auth: app.data.auth
                     }
                     $.ajax({
-                        type: 'get',
+                        type: 'post',
                         url: "/text/edit",
                         dataType: 'json',
                         contentType:"application/json",
-                        data: request,
+                        data: JSON.stringify(request),
                         success: function (data) {
                             if (data.code != 0){
                                 app.$message.error(data.msg)
